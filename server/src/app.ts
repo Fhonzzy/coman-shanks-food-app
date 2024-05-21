@@ -1,20 +1,28 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
-const PORT = 5000;
-import mongoose from "mongoose";
+import connectDb from "./db/connectDb";
+const PORT = process.env.PORT || 8000;
+import userRoute from './Routes/user'
 
 const app = express();
-mongoose
-	.connect(process.env.MONGO_URL as string)
-	.then(() => console.log("Database is connected"));
+const MONGO_URL = process.env.MONGO_URL || ""
+
 app.use(express.json());
 app.use(cors());
 
-app.get("/test", (req: Request, res: Response) => {
-	res.json({ msg: "hello" });
-});
+app.use("/api/v1/my/user", userRoute)
 
-app.listen(PORT, () => {
-	console.log(`Server is listening on port ${PORT}`);
-});
+const startServer = async () => {
+	try {
+		await connectDb(MONGO_URL)
+		app.listen(PORT, () => {
+			console.log(`Server is listening on port ${PORT}`);
+		});
+	} catch (error) {
+		console.log("Failed to Start Server: ", error);
+	}
+}
+
+startServer()
+
