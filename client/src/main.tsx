@@ -4,13 +4,24 @@ import "./global.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./AppRoutes";
 import Auth0ProviderWithNav from "./auth/Auth0ProviderWithNav";
+import {QueryClient, QueryClientProvider} from 'react-query'
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+		}
+	}
+})
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<Router>
-			<Auth0ProviderWithNav>
-				<AppRoutes />
-			</Auth0ProviderWithNav>
+			<QueryClientProvider client={queryClient}>
+				<Auth0ProviderWithNav>
+					<AppRoutes />
+				</Auth0ProviderWithNav>
+			</QueryClientProvider>
 		</Router>
 	</React.StrictMode>
 );
