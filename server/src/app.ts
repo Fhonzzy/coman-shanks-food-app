@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import connectDb from "./db/connectDb";
@@ -10,6 +10,10 @@ const MONGO_URL = process.env.MONGO_URL || "";
 
 app.use(express.json());
 app.use(cors());
+
+app.get("/status", async (req: Request, res: Response, next: NextFunction) => {
+	res.send({msg: "OK!"})
+})
 
 app.use("/api/v1/my/user", userRoute);
 

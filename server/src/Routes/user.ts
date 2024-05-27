@@ -7,5 +7,6 @@ const router = express.Router()
 
 router.post("/", jwtCheck, user.createCurrentUser)
 router.put('/', jwtCheck, jwtParse, validateMyUserRequest, user.updateCurrentUser)
+router.get('/', jwtCheck, jwtParse, user.getCurrentUser)
 
 export default router;

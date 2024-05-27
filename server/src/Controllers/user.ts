@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import User from "../Models/User";
 
 const createCurrentUser = async (req: Request, res: Response) => {
@@ -42,7 +42,21 @@ const updateCurrentUser = async (req: Request, res: Response) => {
 	}
 };
 
+const getCurrentUser = async(req: Request, res: Response, next: NextFunction) => {
+	try {
+		const user = await User.findOne({ _id: req.userId})
+		if (!user) {
+			return res.status(404).json({msg: "User not Found!"})
+		}
+		res.json(user)
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({msg: "Error Fetching User!"})
+	}
+}
+
 export default {
 	createCurrentUser,
 	updateCurrentUser,
+	getCurrentUser
 };
