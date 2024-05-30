@@ -4,6 +4,9 @@ import "dotenv/config";
 import connectDb from "./db/connectDb";
 const PORT = process.env.PORT || 8000;
 import userRoute from "./Routes/user";
+import restaurantRoute from './Routes/restaurant'
+import { v2 as cloudinary } from "cloudinary";
+
 
 const app = express();
 const MONGO_URL = process.env.MONGO_URL || "";
@@ -11,12 +14,23 @@ const MONGO_URL = process.env.MONGO_URL || "";
 app.use(express.json());
 app.use(cors());
 
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+//Health check api for my hosted API
 app.get("/status", async (req: Request, res: Response, next: NextFunction) => {
-	res.send({msg: "OK!"})
-})
+	res.send({ msg: "OK!" });
+});
 
+//Routes
 app.use("/api/v1/my/user", userRoute);
+app.use("/api/v1/my/restaurant", restaurantRoute);
 
+
+//Starts the Server
 const startServer = async () => {
 	try {
 		await connectDb(MONGO_URL);
