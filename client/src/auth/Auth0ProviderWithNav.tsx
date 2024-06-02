@@ -34,3 +34,5 @@ const Auth0ProviderWithNav = ({ children }: Props) => {
 };
 
 export default Auth0ProviderWithNav;
+
+//https://chatgpt.com/share/30b31258-4526-4c23-a075-cf120b2a3c03

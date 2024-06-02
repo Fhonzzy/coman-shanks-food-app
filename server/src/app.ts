@@ -4,16 +4,17 @@ import "dotenv/config";
 import connectDb from "./db/connectDb";
 const PORT = process.env.PORT || 8000;
 import userRoute from "./Routes/user";
-import restaurantRoute from './Routes/restaurant'
+import restaurantRoute from './Routes/restaurant';
 import { v2 as cloudinary } from "cloudinary";
-
 
 const app = express();
 const MONGO_URL = process.env.MONGO_URL || "";
 
+//Middleware
 app.use(express.json());
 app.use(cors());
 
+//Cloudinary Config
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 	api_key: process.env.CLOUDINARY_API_KEY,
