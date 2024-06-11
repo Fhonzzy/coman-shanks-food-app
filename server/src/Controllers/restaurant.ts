@@ -13,6 +13,10 @@ const createRestaurant = async (req: Request, res: Response) => {
 
 		// Retrieve the uploaded file from the request object and cast it to the type Express.Multer.File
 		const image = req.file as Express.Multer.File;
+		if (!image) {
+            return res.status(400).json({ msg: "Image file is required" });
+        }
+
 		// Convert the binary data of the image to a Base64-encoded string
 		const base64Image = Buffer.from(image.buffer).toString("base64");
 		// Create a data URI using the image's MIME type and the Base64-encoded string
@@ -35,6 +39,22 @@ const createRestaurant = async (req: Request, res: Response) => {
 	}
 };
 
+const getRestaurant = async (req: Request, res: Response) => {
+	try {
+		const restaurant = await Restaurant.findOne({user: req.userId})
+
+		if(!restaurant) {
+			return res.status(404).json({msg: "Restaurant Doesn't Exist"})
+		}
+
+		res.status(200).json(restaurant)
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({msg: "Something went wrong!"})
+	}
+}
+
 export default {
 	createRestaurant,
+	getRestaurant
 };

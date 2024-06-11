@@ -7,9 +7,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const ImageSection = () => {
-	const { control } = useFormContext();
+	const { control, watch } = useFormContext();
+
+	const imageUrl = watch("imageUrl");
 	return (
 		<div className="space-y-2">
 			<div>
@@ -19,7 +22,17 @@ const ImageSection = () => {
 					Adding a new image will overwrite the existing one
 				</FormDescription>
 			</div>
-			<div className="flex flex-col gap-8 w-[50%]">
+
+			<div className="flex flex-col gap-8 md:w-[50%]">
+				{imageUrl && (
+					<AspectRatio ratio={16 / 9}>
+						<img
+							src={imageUrl}
+							alt="Restaurant Image"
+							className="rounded-md object-cover h-full w-full"
+						/>
+					</AspectRatio>
+				)}
 				<FormField
 					control={control}
 					name="imageFile"
@@ -30,8 +43,10 @@ const ImageSection = () => {
 									className="bg-white"
 									type="file"
 									accept=".jpg, .jpeg, .png"
-									onChange={(e) =>
-										field.onChange(e.target.files ? e.target.files[0] : null)
+									onChange={(event) =>
+										field.onChange(
+											event.target.files ? event.target.files[0] : null
+										)
 									}
 								/>
 							</FormControl>
