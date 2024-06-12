@@ -30,4 +30,13 @@ router.get(
 	restaurant.getRestaurant
 );
 
+router.put(
+	"/",
+	jwtCheck,
+	jwtParse,
+	upload.single("imageFile"),
+	validateMyRestaurantRequest,
+	restaurant.updateRestaurant
+);
+
 export default router;
