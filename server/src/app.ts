@@ -4,19 +4,19 @@ import "dotenv/config";
 import connectDb from "./db/connectDb";
 const PORT = process.env.PORT || 8000;
 import userRoute from "./Routes/user";
-import restaurantRoute from './Routes/restaurant';
+import restaurantRoute from "./Routes/restaurant";
+import restaurantHandlerRoute from "./Routes/restaurantHandlers";
 import { v2 as cloudinary } from "cloudinary";
-
 
 const app = express();
 const MONGO_URL = process.env.MONGO_URL || "";
 
 //Middleware
-app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({ extended: true, limit: '50mb' })); // Increase payload limit
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" })); // Increase payload limit
 app.use(cors());
 
-//Cloudinary Config
+//Cloudinary SDK Config
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 	api_key: process.env.CLOUDINARY_API_KEY,
@@ -31,7 +31,7 @@ app.get("/status", async (req: Request, res: Response, next: NextFunction) => {
 //Routes
 app.use("/api/v1/my/user", userRoute);
 app.use("/api/v1/my/restaurant", restaurantRoute);
-
+app.use("/api/v1/restaurant", restaurantHandlerRoute);
 
 //Starts the Server
 const startServer = async () => {

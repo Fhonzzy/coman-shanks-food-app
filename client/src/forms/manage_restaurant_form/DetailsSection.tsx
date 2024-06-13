@@ -66,7 +66,7 @@ function DetailsSection() {
 				name="deliveryPrice"
 				render={({ field }) => (
 					<FormItem className="max-w-[25%]">
-						<FormLabel>Delivery Price (₦)</FormLabel>
+						<FormLabel className="whitespace-nowrap overflow-hidden text-ellipsis">Delivery Price (₦)</FormLabel>
 						<FormControl>
 							<Input {...field} className="bg-white" placeholder="500" />
 						</FormControl>
@@ -79,7 +79,7 @@ function DetailsSection() {
 				name="estimatedDeliveryTime"
 				render={({ field }) => (
 					<FormItem className="max-w-[25%]">
-						<FormLabel>Estimated Delivery Time (mins)</FormLabel>
+						<FormLabel className="whitespace-nowrap overflow-hidden text-ellipsis">Estimated Delivery Time (mins)</FormLabel>
 						<FormControl>
 							<Input {...field} className="bg-white" placeholder="20" />
 						</FormControl>
