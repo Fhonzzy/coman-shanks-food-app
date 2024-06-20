@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 8000;
 import userRoute from "./Routes/user";
 import restaurantRoute from "./Routes/restaurant";
 import restaurantHandlerRoute from "./Routes/restaurantHandlers";
+import orderRoute from "./Routes/Order"
 import { v2 as cloudinary } from "cloudinary";
 import { corsOptions } from "./Config/corsConfig";
 
@@ -15,9 +16,11 @@ const MONGO_URL = process.env.MONGO_URL || "";
 //Middleware
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" })); // Increase payload limit
-app.use(cors({
-    origin: corsOptions
-}));
+app.use(
+	cors({
+		origin: corsOptions,
+	})
+);
 
 //Cloudinary SDK Config
 cloudinary.config({
@@ -35,6 +38,7 @@ app.get("/status", async (req: Request, res: Response, next: NextFunction) => {
 app.use("/api/v1/my/user", userRoute);
 app.use("/api/v1/my/restaurant", restaurantRoute);
 app.use("/api/v1/restaurant", restaurantHandlerRoute);
+app.use("/api/v1/order", orderRoute);
 
 //Starts the Server
 const startServer = async () => {
