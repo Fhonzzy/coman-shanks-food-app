@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../Models/User";
 
-
 const createCurrentUser = async (req: Request, res: Response) => {
 	try {
 		const { auth0Id } = req.body;
@@ -22,43 +21,42 @@ const createCurrentUser = async (req: Request, res: Response) => {
 
 const updateCurrentUser = async (req: Request, res: Response) => {
 	try {
-		const {name, addressLine1, country, city} = req.body
-		const user = await User.findById(req.userId)
+		const { name, addressLine1, country, city } = req.body;
+		const user = await User.findById(req.userId);
 
-		if(!user) {
-			return res.status(404).json({message: "User not found"})
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
 		}
 
-		user.name = name
-		user.addressLine1 = addressLine1
-		user.city = city
-		user.country = country
+		user.name = name;
+		user.addressLine1 = addressLine1;
+		user.city = city;
+		user.country = country;
 
-		await user.save()
+		await user.save();
 
-		res.status(200).send(user)
+		res.status(200).send(user);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ msg: "Error Updating User" });
 	}
 };
 
-
-const getCurrentUser = async(req: Request, res: Response) => {
+const getCurrentUser = async (req: Request, res: Response) => {
 	try {
-		const user = await User.findOne({ _id: req.userId})
+		const user = await User.findOne({ _id: req.userId });
 		if (!user) {
-			return res.status(404).json({msg: "User not Found!"})
+			return res.status(404).json({ msg: "User not Found!" });
 		}
-		res.json(user)
+		res.json(user);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({msg: "Error Fetching User!"})
+		res.status(500).json({ msg: "Error Fetching User!" });
 	}
-}
+};
 
 export default {
 	createCurrentUser,
 	updateCurrentUser,
-	getCurrentUser
+	getCurrentUser,
 };

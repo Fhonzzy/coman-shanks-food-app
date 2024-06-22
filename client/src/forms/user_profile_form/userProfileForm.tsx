@@ -149,5 +149,4 @@ function UserProfileForm({ onSave, isLoading, currentUser, title = "User Profile
 	);
 }
 
-
 export default UserProfileForm;
