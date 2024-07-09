@@ -5,6 +5,7 @@ import Order from "../Models/Order";
 
 const STRIPE = new Stripe(process.env.SPRIPE_API_KEY as string);
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
+const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 type CheckoutSessionRequest = {
 	cartItems: {
@@ -19,6 +20,37 @@ type CheckoutSessionRequest = {
 		city: string;
 	};
 	restaurantId: string;
+};
+
+const stripeWebhookHandler = async (req: Request, res: Response) => {
+	let event;
+
+	try {
+		const sig = req.headers["stripe-signature"];
+		event = STRIPE.webhooks.constructEvent(
+			req.body,
+			sig as string,
+			STRIPE_ENDPOINT_SECRET
+		);
+	} catch (error: any) {
+		console.log(error);
+		return res.status(400).send(`webhook error: ${error.message}`);
+	}
+
+	if(event.type === "checkout.session.completed") {
+		const order = await Order.findById(event.data.object.metadata?.orderId)
+
+		if(!order) {
+			return res.status(404).json({msg: "Order not found"})
+		}
+
+		order.totalAmount =  event.data.object.amount_total
+		order.status = "paid"
+
+		await order.save()
+	}
+
+	res.status(200).send()
 };
 
 const createCheckoutSession = async (req: Request, res: Response) => {
@@ -37,7 +69,7 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 			status: "placed",
 			deliveryDetails: checkoutSessionRequest.deliveryDetails,
 			cartItems: checkoutSessionRequest.cartItems,
-		})
+		});
 
 		const lineItems = createLineItems(
 			checkoutSessionRequest,
@@ -51,19 +83,22 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 			restaurant._id.toString()
 		);
 
-        if(!session.url) {
-            return res.status(500).json({msg: "Error creating stripe session"})
-        }
+		if (!session.url) {
+			return res.status(500).json({ msg: "Error creating stripe session" });
+		}
 
-		await newOrder.save()
-        
-        res.status(200).json({url: session.url})
+		await newOrder.save();
+
+		res.status(200).json({ url: session.url });
 	} catch (error: any) {
 		console.log(error);
 		res.status(500).json({ msg: error.raw.message });
 	}
 };
 
+
+
+// Stripe Functions
 const createLineItems = (
 	checkoutSessionRequest: CheckoutSessionRequest,
 	menuItems: MenuItemType[]
@@ -125,9 +160,10 @@ const createSession = async (
 		cancel_url: `${FRONTEND_URL}/detail/${restaurantId}?cancelled=true`,
 	});
 
-    return sesssionData
+	return sesssionData;
 };
 
 export default {
 	createCheckoutSession,
+	stripeWebhookHandler,
 };

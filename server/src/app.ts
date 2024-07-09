@@ -14,8 +14,7 @@ const app = express();
 const MONGO_URL = process.env.MONGO_URL || "";
 
 //Middleware
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" })); // Increase payload limit
+// app.use(express.urlencoded({ extended: true, limit: "50mb" })); // Increase payload limit
 app.use(
 	cors({
 		origin: corsOptions,
@@ -29,6 +28,10 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+app.use("/api/v1/order/checkout/webhook", express.raw({type: "*/*"}))
+
+app.use(express.json());
+
 //Health check api for my hosted API
 app.get("/status", async (req: Request, res: Response, next: NextFunction) => {
 	res.send({ msg: "OK!" });
@@ -39,6 +42,7 @@ app.use("/api/v1/my/user", userRoute);
 app.use("/api/v1/my/restaurant", restaurantRoute);
 app.use("/api/v1/restaurant", restaurantHandlerRoute);
 app.use("/api/v1/order", orderRoute);
+
 
 //Starts the Server
 const startServer = async () => {
