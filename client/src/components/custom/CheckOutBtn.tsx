@@ -4,10 +4,8 @@ import { Button } from "../ui/button";
 import LoadingBtn from "./LoadingBtn";
 import { Dialog } from "../ui/dialog";
 import { DialogContent, DialogTrigger } from "../ui/dialog";
-import UserProfileForm, {
-	UserFormData,
-} from "@/forms/user_profile_form/UserProfileForm";
 import { useGetMyUser } from "@/api/MyUserApi";
+import UserProfileForm, { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 
 type Props = {
 	onCheckout: (userFormData: UserFormData) => void;

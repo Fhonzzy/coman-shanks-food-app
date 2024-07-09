@@ -6,7 +6,7 @@ import OrderSummary from "@/components/custom/OrderSummary";
 import RestaurantInfo from "@/components/custom/RestaurantInfo";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardFooter } from "@/components/ui/card";
-import { UserFormData } from "@/forms/user_profile_form/UserProfileForm";
+import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { MenuItem as MenuItemType } from "@/types/types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -21,7 +21,8 @@ export type CartItem = {
 const SingleRestaurantPage = () => {
 	const { restaurantId } = useParams();
 	const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-	const {createCheckoutSession, isLoading: isCheckoutLoading} = usecreateCheckoutSession()
+	const { createCheckoutSession, isLoading: isCheckoutLoading } =
+		usecreateCheckoutSession();
 
 	const [cartItems, setCartItems] = useState<CartItem[]>(() => {
 		const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -80,28 +81,28 @@ const SingleRestaurantPage = () => {
 	const onCheckout = async (userFormData: UserFormData) => {
 		// console.log("userFormData", userFormData);
 
-		if(!restaurant) {
+		if (!restaurant) {
 			return;
 		}
 
 		const checkoutData = {
 			cartItems: cartItems.map((cartItem) => ({
-			  menuItemId: cartItem._id,
-			  name: cartItem.name,
-			  quantity: cartItem.quantity.toString(),
+				menuItemId: cartItem._id,
+				name: cartItem.name,
+				quantity: cartItem.quantity.toString(),
 			})),
 			deliveryDetails: {
-			  name: userFormData.name,
-			  addressLine1: userFormData.addressLine1,
-			  city: userFormData.city,
-			  country: userFormData.country,
-			  email: userFormData.email as string,
+				name: userFormData.name,
+				addressLine1: userFormData.addressLine1,
+				city: userFormData.city,
+				country: userFormData.country,
+				email: userFormData.email as string,
 			},
 			restaurantId: restaurant._id,
-		  };
+		};
 
-		  const data = await createCheckoutSession(checkoutData);
-		  window.location.href = data.url
+		const data = await createCheckoutSession(checkoutData);
+		window.location.href = data.url;
 	};
 
 	if (isLoading || !restaurant) {
@@ -142,7 +143,7 @@ const SingleRestaurantPage = () => {
 							<CheckOutBtn
 								disabled={cartItems.length === 0}
 								onCheckout={onCheckout}
-								isLoading= {isCheckoutLoading}
+								isLoading={isCheckoutLoading}
 							/>
 						</CardFooter>
 					</Card>
