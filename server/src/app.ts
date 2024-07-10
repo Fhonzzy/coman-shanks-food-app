@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 8000;
 import userRoute from "./Routes/user";
 import restaurantRoute from "./Routes/restaurant";
 import restaurantHandlerRoute from "./Routes/restaurantHandlers";
-import orderRoute from "./Routes/Order"
+import orderRoute from "./Routes/Order";
 import { v2 as cloudinary } from "cloudinary";
 import { corsOptions } from "./Config/corsConfig";
 
@@ -28,7 +28,7 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-app.use("/api/v1/order/checkout/webhook", express.raw({type: "*/*"}))
+app.use("/api/v1/order/checkout/webhook", express.raw({ type: "*/*" }));
 
 app.use(express.json());
 
@@ -42,7 +42,6 @@ app.use("/api/v1/my/user", userRoute);
 app.use("/api/v1/my/restaurant", restaurantRoute);
 app.use("/api/v1/restaurant", restaurantHandlerRoute);
 app.use("/api/v1/order", orderRoute);
-
 
 //Starts the Server
 const startServer = async () => {
