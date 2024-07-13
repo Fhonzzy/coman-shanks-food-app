@@ -14,6 +14,8 @@ const upload = multer({
 	},
 });
 
+router.get("/order", jwtCheck, jwtParse, restaurant.getMyRestaurantOrders)
+
 router.post(
 	"/",
 	jwtCheck,
@@ -38,5 +40,7 @@ router.put(
 	validateMyRestaurantRequest,
 	restaurant.updateRestaurant
 );
+
+router.patch("/order/:orderId/status", jwtCheck, jwtParse, restaurant.updateOrderStatus)
 
 export default router;

@@ -18,7 +18,7 @@ const OrderStatusHeader = ({ order }: Props) => {
 
         const paddesMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
-        return `${hours}:${paddesMinutes}:`
+        return `${hours}:${paddesMinutes}`
 	};
 
 
@@ -33,7 +33,7 @@ const OrderStatusHeader = ({ order }: Props) => {
 				<span>Expected by: {getExpectedDelivery()}</span>
 			</h1>
 
-			<Progress className="animate-pulse" value={getOrderStatusInfo().progressValue}/>
+			<Progress className={`animate-pulse`} value={getOrderStatusInfo().progressValue}/>
 		</>
 	);
 };

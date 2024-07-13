@@ -1,4 +1,4 @@
-import { Restaurant } from "@/types/types";
+import { Order, Restaurant } from "@/types/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
@@ -118,3 +118,83 @@ export const useUpdateMyRestaurant = () => {
 		isLoading,
 	};
 };
+
+
+export const useGetMyRestaurantOrders = () => {
+	const {getAccessTokenSilently} = useAuth0();
+
+	const getMyMyRestaurantOrdersRequest = async (): Promise<Order[]> => {
+		const accessToken = await getAccessTokenSilently()
+		const response = await fetch(`${API_BASE_URL}/api/v1/my/restaurant/order`, {
+			method: "GET",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json"
+			}
+		})
+		if(!response.ok) {
+			throw new Error("Error fetching Orders")
+		}
+
+		return response.json()
+	}
+
+	const {data: myRestaurantOrders, isLoading} = useQuery("fetchMyRestaurantOrders", getMyMyRestaurantOrdersRequest)
+
+	return {
+		myRestaurantOrders,
+		isLoading
+	}
+}
+
+type UpdateOrderStatusRequest = {
+	orderId: string;
+	status: string;
+  };
+  
+  export const useUpdateMyRestaurantOrder = () => {
+	const { getAccessTokenSilently } = useAuth0();
+  
+	const updateMyRestaurantOrder = async (
+	  updateStatusOrderRequest: UpdateOrderStatusRequest
+	) => {
+	  const accessToken = await getAccessTokenSilently();
+  
+	  const response = await fetch(
+		`${API_BASE_URL}/api/v1/my/restaurant/order/${updateStatusOrderRequest.orderId}/status`,
+		{
+		  method: "PATCH",
+		  headers: {
+			Authorization: `Bearer ${accessToken}`,
+			"Content-Type": "application/json",
+		  },
+		  body: JSON.stringify({ status: updateStatusOrderRequest.status }),
+		}
+	  );
+  
+	  if (!response.ok) {
+		throw new Error("Failed to update status");
+	  }
+  
+	  return response.json();
+	};
+  
+	const {
+	  mutateAsync: updateRestaurantStatus,
+	  isLoading,
+	  isError,
+	  isSuccess,
+	  reset,
+	} = useMutation(updateMyRestaurantOrder);
+  
+	if (isSuccess) {
+	  toast.success("Order updated");
+	}
+  
+	if (isError) {
+	  toast.error("Unable to update order");
+	  reset();
+	}
+  
+	return { updateRestaurantStatus, isLoading };
+  };

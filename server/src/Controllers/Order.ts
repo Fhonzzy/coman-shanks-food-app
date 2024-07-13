@@ -32,6 +32,8 @@ const getMyOrders = async (req: Request, res: Response) => {
 	}
 }
 
+
+
 const stripeWebhookHandler = async (req: Request, res: Response) => {
 	let event;
 
@@ -176,5 +178,5 @@ const createSession = async (
 export default {
 	createCheckoutSession,
 	stripeWebhookHandler,
-	getMyOrders
+	getMyOrders,
 };
