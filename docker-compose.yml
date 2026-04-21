@@ -1,0 +1,39 @@
+services:
+  server:
+    build: ./server
+    container_name: comanshanks-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./server/.env
+    depends_on:
+      - mongo
+
+
+  client:
+    build: ./client
+    container_name: comanshanks-client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    stdin_open: true
+    depends_on:
+      - server
+
+
+  mongo:
+    image: mongo:6
+    container_name: comanshanks-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+
+volumes:
+  mongo_data:
