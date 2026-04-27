@@ -1,0 +1,35 @@
+# client-deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: frontend
+          image: jonaskingsley/food-app-client:v3
+          ports:
+            - containerPort: 5173
+
+---
+# client-service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: client
+spec:
+  type: NodePort
+  selector:
+    app: client
+  ports:
+    - port: 5173
+      targetPort: 5173
+      nodePort: 30007
