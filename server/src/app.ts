@@ -33,7 +33,7 @@ app.use("/api/v1/order/checkout/webhook", express.raw({ type: "*/*" }));
 app.use(express.json());
 
 //Health check api for my hosted API
-app.get("/status", async (req: Request, res: Response, next: NextFunction) => {
+app.get("/api/status", async (req: Request, res: Response, next: NextFunction) => {
 	res.send({ msg: "OK!" });
 });
 

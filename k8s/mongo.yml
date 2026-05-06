@@ -1,3 +1,4 @@
+# mongo-deployment.yml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +20,7 @@ spec:
             - containerPort: 27017
 
 ---
-
+# mongo-service.yml
 apiVersion: v1
 kind: Service
 metadata:

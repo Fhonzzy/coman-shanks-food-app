@@ -15,9 +15,9 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: jonaskingsley/food-app-client:v3
+          image: jonaskingsley/food-app-client:v12
           ports:
-            - containerPort: 5173
+            - containerPort: 80
 
 ---
 # client-service.yml
@@ -30,6 +30,6 @@ spec:
   selector:
     app: client
   ports:
-    - port: 5173
-      targetPort: 5173
+    - port: 80
+      targetPort: 80
       nodePort: 30007

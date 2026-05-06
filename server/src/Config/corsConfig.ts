@@ -1,4 +1,4 @@
-const allowedOrigins = ['http://localhost:5173', 'https://comanshanks-client.onrender.com'];
+const allowedOrigins = ['http://localhost:5173', 'https://comanshanks-client.onrender.com', 'http://localhost:8080'];
 
 type CorsCallback = (err: Error | null, allow?: boolean) => void;
 

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: jonaskingsley/food-app-server:v3
+          image: jonaskingsley/food-app-server:v8
           ports:
             - containerPort: 5000
 
