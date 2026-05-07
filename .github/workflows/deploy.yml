@@ -32,13 +32,3 @@ jobs:
               run: |
                 docker build -t ${{secrets.DOCKER_USERNAME}}/food-app-server:latest ./server
                 docker push ${{secrets.DOCKER_USERNAME}}/food-app-server:latest
-
-
-            - name: Set up Kubectl
-              uses: azure/setup-kubectl@v4
-
-
-            - name: Deploy to cluster
-              run: |
-                kubectl rollout restart deployment client
-                kubectl rollout restart deployment server
