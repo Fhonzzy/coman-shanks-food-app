@@ -16,16 +16,16 @@ const MONGO_URL = process.env.MONGO_URL || "";
 //Middleware
 // app.use(express.urlencoded({ extended: true, limit: "50mb" })); // Increase payload limit
 app.use(
-	cors({
-		origin: corsOptions,
-	})
+  cors({
+    origin: corsOptions,
+  }),
 );
 
 //Cloudinary SDK Config
 cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 app.use("/api/v1/order/checkout/webhook", express.raw({ type: "*/*" }));
@@ -33,9 +33,12 @@ app.use("/api/v1/order/checkout/webhook", express.raw({ type: "*/*" }));
 app.use(express.json());
 
 //Health check api for my hosted API
-app.get("/api/status", async (req: Request, res: Response, next: NextFunction) => {
-	res.send({ msg: "OK!" });
-});
+app.get(
+  "/api/status",
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.send({ msg: "OK!" });
+  },
+);
 
 //Routes
 app.use("/api/v1/my/user", userRoute);
@@ -44,15 +47,26 @@ app.use("/api/v1/restaurant", restaurantHandlerRoute);
 app.use("/api/v1/order", orderRoute);
 
 //Starts the Server
-const startServer = async () => {
-	try {
-		await connectDb(MONGO_URL);
-		app.listen(PORT, () => {
-			console.log(`Server is listening on port ${PORT}`);
-		});
-	} catch (error) {
-		console.log("Failed to Start Server: ", error);
-	}
-};
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
 
-startServer();
+connectDb(MONGO_URL)
+  .then(() => {
+    console.log("Database Connection is Successful");
+  })
+  .catch((error) => {
+    console.log("Database Connection Failed:", error);
+  });
+// const startServer = async () => {
+// 	try {
+// 		await connectDb(MONGO_URL);
+// 		app.listen(PORT, () => {
+// 			console.log(`Server is listening on port ${PORT}`);
+// 		});
+// 	} catch (error) {
+// 		console.log("Failed to Start Server: ", error);
+// 	}
+// };
+
+// startServer();

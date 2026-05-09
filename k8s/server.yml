@@ -15,9 +15,35 @@ spec:
     spec:
       containers:
         - name: server
-          image: jonaskingsley/food-app-server:v8
+          image: jonaskingsley/food-app-server:v9
           ports:
             - containerPort: 5000
+
+          envFrom:
+            - configMapRef:
+                name: server-config
+
+            - secretRef:
+                name: server-secret
+
+          startupProbe:
+            httpGet:
+              path: /api/status
+              port: 5000
+            failureThreshold: 30
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /api/status
+              port: 5000
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /api/status
+              port: 5000
+            periodSeconds: 5
 
 ---
 # server-service.yml
@@ -26,10 +52,9 @@ kind: Service
 metadata:
   name: server
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: server
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30008
